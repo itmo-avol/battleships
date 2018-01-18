@@ -1,0 +1,25 @@
+{
+  "name": "battleships",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bundle.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "pixi": "^0.3.1",
+    "pixi.js": "^4.6.2"
+  },
+  "devDependencies": {
+    "@types/pixi.js": "^4.6.3",
+    "ts-loader": "^1.3.3",
+    "typescript": "^2.1.5",
+    "webpack": "^1.14.0"
+  },
+  "scripts": {
+    "build": "webpack -p",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node service/service.js",
+    "watch": "webpack --watch"
+  },
+  "author": "",
+  "license": ""
+}

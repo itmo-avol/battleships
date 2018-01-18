@@ -1,0 +1,7 @@
+.vscode/*
+bundle.js
+bundle.js.map
+**/node_modules/*
+typings/*
+npm-debug.log
+debug.log
