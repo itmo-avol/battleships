@@ -7,7 +7,10 @@ export class ShipPosition {
   }
 }
 
-export type ShipOrient = "h" | "v";
+export enum ShipOrient {
+  h,
+  v
+}
 
 export class Ship {
   public hp: number;
@@ -31,7 +34,10 @@ export class Field {
   constructor(public width: number, public height: number) {}
 }
 
-export type Player = "me" | "ai";
+export enum Player {
+  me,
+  ai
+}
 
 class Shot {
   constructor(
@@ -56,8 +62,8 @@ export class Game {
   private shots: Shot[] = [];
   private ships: Ship[] = [];
   constructor() {
-    this.rules.ships.forEach(l => this.createShip("me", l)); //создаём корабли для себя и компьютера
-    this.rules.ships.forEach(l => this.createShip("ai", l));
+    this.rules.ships.forEach(l => this.createShip(Player.me, l)); //создаём корабли для себя и компьютера
+    this.rules.ships.forEach(l => this.createShip(Player.ai, l));
   }
 
   _field() {
@@ -154,11 +160,11 @@ export class Game {
   }
 
   whichPlayerWon(): Player | undefined {
-    if (this.shipsByPlayer("me").filter(x => x.hp > 0).length == 0) {
-      return "ai";
+    if (this.shipsByPlayer(Player.me).filter(x => x.hp > 0).length == 0) {
+      return Player.ai;
     }
-    if (this.shipsByPlayer("ai").filter(x => x.hp > 0).length == 0) {
-      return "me";
+    if (this.shipsByPlayer(Player.ai).filter(x => x.hp > 0).length == 0) {
+      return Player.me;
     }
   }
 
@@ -277,7 +283,7 @@ function all_valid_positions(
   field: Field
 ): ShipPosition[] {
   let result: ShipPosition[] = [];
-  let orients: ShipOrient[] = ["h", "v"];
+  let orients: ShipOrient[] = [ShipOrient.h, ShipOrient.v];
   for (let x = 0; x < field.width; ++x) {
     for (let y = 0; y < field.height; ++y) {
       for (let orient of orients) {

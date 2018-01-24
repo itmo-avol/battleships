@@ -16,12 +16,12 @@ import {
 
 function toggle_orient(orient?: ShipOrient): ShipOrient {
   switch (orient) {
-    case "h":
-      return "v";
-    case "v":
-      return "h";
+    case ShipOrient.h:
+      return ShipOrient.v;
+    case ShipOrient.v:
+      return ShipOrient.h;
     default:
-      return "h";
+      return ShipOrient.h;
   }
 }
 
@@ -65,7 +65,7 @@ class ShipSprite extends PIXI.Sprite {
   }
 
   setOrientation(orient: ShipOrient) {
-    if (orient == "v") {
+    if (orient == ShipOrient.v) {
       animation_manager.animate({
         obj: this,
         prop: "rotation",
@@ -202,7 +202,7 @@ class FieldView extends PIXI.Container {
       let sh = sh_sprite.ship;
 
       if (sh.position) {
-        if (this.player == "me") {
+        if (this.player == Player.me) {
           sh_sprite.visible = true;
         } else {
           sh_sprite.visible = sh.hp <= 0;
@@ -251,7 +251,7 @@ function animate_shot(sh_sprite: PIXI.Sprite) {
 }
 
 class PlaceShipsControl extends PIXI.Container {
-  fieldView: FieldView = new FieldView("me");
+  fieldView: FieldView = new FieldView(Player.me);
   current_ship_sprite?: ShipSprite;
   current_ship: Ship | undefined;
 
@@ -269,7 +269,7 @@ class PlaceShipsControl extends PIXI.Container {
   }
 
   autoplace() {
-    game.autoplace("me");
+    game.autoplace(Player.me);
     this.fieldView.update();
     this._render();
     this.emit("ships_placed");
@@ -288,13 +288,13 @@ class PlaceShipsControl extends PIXI.Container {
           this.current_ship.position.orient
         );
       } else {
-        this.current_ship.position = new ShipPosition(cell, "h");
+        this.current_ship.position = new ShipPosition(cell, ShipOrient.h);
       }
     }
   }
 
   _pick_next_ship() {
-    let ship = game.shipsByPlayer("me").find(x => !x.position);
+    let ship = game.shipsByPlayer(Player.me).find(x => !x.position);
     console.log("_pick_next_ship", ship);
     if (ship) {
       this.current_ship = ship;
@@ -309,7 +309,7 @@ class PlaceShipsControl extends PIXI.Container {
 
   _can_place() {
     if (this.current_ship) {
-      return game.isValidPlacement("me");
+      return game.isValidPlacement(Player.me);
     }
     return false;
   }
@@ -351,7 +351,10 @@ class PlaceShipsControl extends PIXI.Container {
           this.current_ship.position.orient
         );
       } else {
-        this.current_ship.position = new ShipPosition(new Cell(0, 0), "h");
+        this.current_ship.position = new ShipPosition(
+          new Cell(0, 0),
+          ShipOrient.h
+        );
       }
       this._render();
     }
@@ -389,18 +392,21 @@ class PlacingUi extends PIXI.Container {
   }
 }
 
-type GameResult = "WIN" | "LOSE";
+enum GameResult {
+  WIN,
+  LOSE
+}
 
 class MyBattleField extends FieldView {
   constructor() {
-    super("me");
+    super(Player.me);
   }
 }
 
 class TheirBattleField extends FieldView {
   constructor() {
-    super("ai");
-    game.autoplace("ai");
+    super(Player.ai);
+    game.autoplace(Player.ai);
     this.update();
   }
 }
@@ -428,7 +434,7 @@ class BattleUi extends PIXI.Container {
     this.field2.on("click", this._click.bind(this));
 
     this.field2.on("cell_click", cell => {
-      let sh = game.addShot(cell, "ai");
+      let sh = game.addShot(cell, Player.ai);
       this.field2.update();
       do_render();
       if (sh) {
@@ -448,7 +454,7 @@ class BattleUi extends PIXI.Container {
   private ai_shot() {
     while (true) {
       let c = game.randomCell();
-      let sh = game.addShot(c, "me");
+      let sh = game.addShot(c, Player.me);
       if (sh) {
         console.log("Shot at", c.x, c.y, sh.hit);
       }
@@ -464,7 +470,7 @@ class BattleUi extends PIXI.Container {
 
   _click() {
     if (this.on_finished) {
-      this.on_finished("WIN");
+      this.on_finished(GameResult.WIN);
     }
   }
 }
@@ -543,10 +549,10 @@ class GameUi {
 
   toGameOver() {
     switch (game.whichPlayerWon()) {
-      case "ai":
+      case Player.ai:
         current_view = this.playerLost;
         break;
-      case "me":
+      case Player.me:
         current_view = this.playerWon;
         break;
     }
