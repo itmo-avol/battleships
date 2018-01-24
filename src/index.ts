@@ -274,12 +274,12 @@ class PlaceShipsControl extends PIXI.Container {
     this.emit("ships_placed");
   }
 
-  _render() {
+  private _render() {
     this.fieldView.update();
     do_render();
   }
 
-  _move_ship(cell: Cell) {
+  private _move_ship(cell: Cell) {
     if (this.current_ship) {
       if (this.current_ship.position) {
         this.current_ship.position = new ShipPosition(
@@ -292,7 +292,7 @@ class PlaceShipsControl extends PIXI.Container {
     }
   }
 
-  _pick_next_ship() {
+  private _pick_next_ship() {
     let ship = game.shipsByPlayer(Player.me).find(x => !x.position);
     console.log("_pick_next_ship", ship);
     if (ship) {
@@ -306,20 +306,20 @@ class PlaceShipsControl extends PIXI.Container {
     }
   }
 
-  _can_place() {
+  private _can_place() {
     if (this.current_ship) {
       return game.isValidPlacement(Player.me);
     }
     return false;
   }
 
-  _place() {
+  private _place() {
     if (this._can_place()) {
       this._pick_next_ship();
     }
   }
 
-  _cell_mousemove(cell, point) {
+  private _cell_mousemove(cell, point) {
     if (this.current_ship) {
       this._move_ship(cell);
       if (this._can_place()) {
@@ -331,7 +331,7 @@ class PlaceShipsControl extends PIXI.Container {
     }
   }
 
-  _mouse_out() {
+  private _mouse_out() {
     if (this.current_ship) {
       renderer.view.style.cursor = "default";
       this.current_ship.position = undefined;
@@ -339,11 +339,11 @@ class PlaceShipsControl extends PIXI.Container {
     }
   }
 
-  _click(e) {
+  private _click(e) {
     this._place();
   }
 
-  _right_click(e) {
+  private _right_click(e) {
     if (this.current_ship) {
       if (this.current_ship.position) {
         this.current_ship.position.orient = toggle_orient(
@@ -467,7 +467,7 @@ class BattleUi extends PIXI.Container {
     do_render();
   }
 
-  _click() {
+  private _click() {
     if (this.on_finished) {
       this.on_finished(GameResult.WIN);
     }

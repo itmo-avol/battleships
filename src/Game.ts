@@ -23,7 +23,7 @@ export class Game {
     this.rules.ships.forEach(l => this.createShip(Player.ai, l));
   }
 
-  _field() {
+  private _field() {
     return new Field(this.rules.field.width, this.rules.field.height); //создаем игровое поле
   }
 
@@ -31,11 +31,11 @@ export class Game {
     return this.ships.push(new Ship(length, player));
   }
 
-  shipsByPlayer(player: Player): Ship[] {
+  public shipsByPlayer(player: Player): Ship[] {
     return this.ships.filter(x => x.player == player);
   }
 
-  isValidPlacement(player: Player) {
+  public isValidPlacement(player: Player) {
     let ships = this.shipsByPlayer(player);
     let ships2: Ship[] = [];
     for (let sh of ships) {
@@ -52,11 +52,11 @@ export class Game {
     return true;
   }
 
-  autoplace(player: Player) {
+  public autoplace(player: Player) {
     random_place_ships(this.shipsByPlayer(player), this._field());
   }
 
-  shipByCell(player: Player, cell: Cell): Ship | undefined {
+  public shipByCell(player: Player, cell: Cell): Ship | undefined {
     for (let sh of this.shipsByPlayer(player)) {
       let { startx, endx, starty, endy } = ship_ends(sh.length, sh.position);
       for (let x = startx; x <= endx; ++x) {
@@ -70,7 +70,11 @@ export class Game {
     return undefined;
   }
 
-  addShot(cell: Cell, player: Player, auto: boolean = false): Shot | undefined {
+  public addShot(
+    cell: Cell,
+    player: Player,
+    auto: boolean = false
+  ): Shot | undefined {
     if (!is_cell_valid(cell.x, cell.y, this._field())) {
       return;
     }
@@ -112,11 +116,11 @@ export class Game {
     return new_shot;
   }
 
-  shotsByPlayer(player: Player): Shot[] {
+  public shotsByPlayer(player: Player): Shot[] {
     return this.shots.filter(x => x.player == player);
   }
 
-  whichPlayerWon(): Player | undefined {
+  public whichPlayerWon(): Player | undefined {
     if (this.shipsByPlayer(Player.me).filter(x => x.hp > 0).length == 0) {
       return Player.ai;
     }
@@ -125,7 +129,7 @@ export class Game {
     }
   }
 
-  randomCell(): Cell {
+  public randomCell(): Cell {
     let x = getRandomInt(0, this.rules.field.width);
     let y = getRandomInt(0, this.rules.field.height);
     return new Cell(x, y);
