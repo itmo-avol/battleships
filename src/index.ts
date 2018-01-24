@@ -365,21 +365,36 @@ type BattleFinished = (result: GameResult) => void;
 class PlacingUi extends PIXI.Container {
   field: PlaceShipsControl = new PlaceShipsControl();
   autoPlaceButton: PIXI.Text;
+  rotationHelpButton: PIXI.Text;
   current_ship: ShipSprite | null;
   constructor() {
     super();
     this.addChild(this.field);
     this.field.position.set(10, 60);
-    this.autoPlaceButton = new PIXI.Text("Place ships automatically", {
-      fontFamily: "sans-serif",
-      fontSize: "32px",
-      fill: "Black"
-    });
+    this.autoPlaceButton = new PIXI.Text(
+      "Click here to place ships automatically",
+      {
+        fontFamily: "sans-serif",
+        fontSize: "28px",
+        fill: "Black"
+      }
+    );
     this.autoPlaceButton.interactive = true;
     this.autoPlaceButton.buttonMode = true;
-    this.autoPlaceButton.position.set(300, 60);
+    this.autoPlaceButton.position.set(250, 60);
+
+    this.rotationHelpButton = new PIXI.Text(
+      "Press right mouse button to rotate a ship",
+      {
+        fontFamily: "sans-serif",
+        fontSize: "20px",
+        fill: "Black"
+      }
+    );
+    this.rotationHelpButton.position.set(5, 5);
 
     this.addChild(this.autoPlaceButton);
+    this.addChild(this.rotationHelpButton);
 
     this.autoPlaceButton.on("click", () => this.field.autoplace());
 
@@ -517,7 +532,13 @@ class GameUi {
     this.splash.buttonMode = true;
     this.splash.interactive = true;
     this.splash.on("click", () => this.toPlacing());
-    this.playGame = new PIXI.Sprite(textures["play_game.png"]);
+    this.playGame = new PIXI.Text("Click to start playing", {
+      fontFamily: "sans-serif",
+      fontSize: "32px",
+      fill: "Black"
+    });
+    this.playGame.interactive = true;
+    this.playGame.buttonMode = true;
     this.playGame.position.set(10, 10);
     this.splash.addChild(this.playGame);
 
