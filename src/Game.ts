@@ -1,53 +1,10 @@
-export class ShipPosition {
-  cell: Cell;
-  orient: ShipOrient; //ориентация в пространстве (горизонт/верт.)
-  constructor(cell: Cell, orient: ShipOrient) {
-    this.cell = cell;
-    this.orient = orient;
-  }
-}
-
-export enum ShipOrient {
-  h,
-  v
-}
-
-export class Ship {
-  public hp: number;
-  public position: ShipPosition | undefined;
-  constructor(public readonly length: number, public readonly player: Player) {
-    this.hp = length;
-  }
-}
-
-export class Cell {
-  readonly x: number;
-  readonly y: number;
-
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
-export class Field {
-  constructor(public width: number, public height: number) {}
-}
-
-export enum Player {
-  me,
-  ai
-}
-
-class Shot {
-  constructor(
-    readonly id,
-    readonly cell: Cell,
-    readonly player: Player,
-    readonly hit: boolean,
-    readonly auto: boolean
-  ) {}
-}
+import { Shot } from "./Shot";
+import { Player } from "./Player";
+import { Ship } from "./Ship";
+import { Field } from "./Field";
+import { Cell } from "./Cell";
+import { ShipPosition } from "./ShipPosition";
+import { ShipOrient } from "./ShipOrient";
 
 export class Game {
   rules = {

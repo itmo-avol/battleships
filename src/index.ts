@@ -4,15 +4,14 @@ import { $on } from "./helpers";
 import Easing from "./easing";
 import AnimationManager from "./animation_manager";
 
-import {
-  Ship,
-  ShipOrient,
-  Game,
-  Field,
-  Cell,
-  ShipPosition,
-  Player
-} from "./model";
+import { Shot } from "./Shot";
+import { Player } from "./Player";
+import { Ship } from "./Ship";
+import { Field } from "./Field";
+import { Cell } from "./Cell";
+import { ShipOrient } from "./ShipOrient";
+import { Game } from "./Game";
+import { ShipPosition } from "./ShipPosition";
 
 function toggle_orient(orient?: ShipOrient): ShipOrient {
   switch (orient) {
